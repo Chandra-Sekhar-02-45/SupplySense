@@ -40,15 +40,30 @@ def run_pipeline(df: pd.DataFrame) -> pd.DataFrame:
 	return report_agent.build(current_stock, forecast_df, safety_df, horizon_days=horizon)
 
 if mode == "CSV Upload":
-	st.subheader("CSV Upload")
-	uploaded = st.file_uploader("Upload sales CSV (date, sku, units_sold)", type=["csv"])
+	st.subheader("File Upload (CSV or Excel)")
+	uploaded = st.file_uploader(
+		"Upload sales file (CSV or Excel .xlsx; must include sku + a date/quantity column)",
+		type=["csv", "xlsx"],
+	)
 	if uploaded is not None:
-		raw = pd.read_csv(uploaded)
+		# Read based on file extension
+		name = uploaded.name.lower()
+		if name.endswith(".csv"):
+			raw = pd.read_csv(uploaded)
+		elif name.endswith(".xlsx"):
+			raw = pd.read_excel(uploaded, engine="openpyxl")
+		else:
+			st.error("Unsupported file type. Please upload a .csv or .xlsx file.")
+			st.stop()
 		st.write("Preview", raw.head())
 		if st.button("Process CSV"):
-			report_df = run_pipeline(raw)
-			st.dataframe(report_df, use_container_width=True)
-			st.download_button("Download Report CSV", report_df.to_csv(index=False), file_name="reorder_report.csv")
+			try:
+				report_df = run_pipeline(raw)
+			except ValueError as e:
+				st.error(f"Upload error: {e}")
+			else:
+				st.dataframe(report_df, use_container_width=True)
+				st.download_button("Download Report CSV", report_df.to_csv(index=False), file_name="reorder_report.csv")
 	else:
 		st.info("Upload a CSV to continue.")
 else:
@@ -64,7 +79,11 @@ else:
 	if st.button("Run Forecast"):
 		df = pd.DataFrame(data_entries)
 		df["date"] = pd.to_datetime(df["date"])  # ensure dtype
-		report_df = run_pipeline(df)
-		st.success("Completed")
-		st.dataframe(report_df, use_container_width=True)
-		st.download_button("Download Report CSV", report_df.to_csv(index=False), file_name="reorder_report.csv")
+		try:
+			report_df = run_pipeline(df)
+		except ValueError as e:
+			st.error(f"Form data error: {e}")
+		else:
+			st.success("Completed")
+			st.dataframe(report_df, use_container_width=True)
+			st.download_button("Download Report CSV", report_df.to_csv(index=False), file_name="reorder_report.csv")

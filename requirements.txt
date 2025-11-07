@@ -8,6 +8,7 @@ numpy
 statsmodels
 prophet
 streamlit
+openpyxl
 
 # Visualization
 matplotlib
