@@ -1,14 +1,23 @@
 # SupplySense core dependencies
+pip>=23.0
+setuptools>=68.0
+
+# Core
 pandas
 numpy
 statsmodels
 prophet
 streamlit
 
-# Visualization (optional but recommended)
+# Visualization
 matplotlib
 plotly
 
-# For future ML expansion
+# ML expansion
 scikit-learn
+
+# Utility
+python-dotenv
+joblib
+pytest
 
