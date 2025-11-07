@@ -42,7 +42,7 @@ def run_pipeline(df: pd.DataFrame) -> pd.DataFrame:
 if mode == "CSV Upload":
 	st.subheader("File Upload (CSV or Excel)")
 	uploaded = st.file_uploader(
-		"Upload sales file (CSV or Excel .xlsx; must include sku + a date/quantity column)",
+		"Upload sales file (CSV or Excel .xlsx : Rows(date(day/month/year) > sku > units_sold))",
 		type=["csv", "xlsx"],
 	)
 	if uploaded is not None:
