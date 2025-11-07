@@ -1,0 +1,14 @@
+# SupplySense core dependencies
+pandas
+numpy
+statsmodels
+prophet
+streamlit
+
+# Visualization (optional but recommended)
+matplotlib
+plotly
+
+# For future ML expansion
+scikit-learn
+
