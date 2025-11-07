@@ -21,4 +21,6 @@ scikit-learn
 python-dotenv
 joblib
 pytest
+fastapi
+uvicorn
 

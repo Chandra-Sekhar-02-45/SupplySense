@@ -45,6 +45,45 @@ Form Input mode:
 ```bash
 streamlit run app/app_form.py
 ```
+Both Upload & Input:
+```bash
+streamlit run app/main.py
+```
+
+## FastAPI backend (optional)
+
+Install requirements if not already done, then run the server:
+
+```bash
+uvicorn api.server:app --reload
+```
+
+Open docs at http://127.0.0.1:8000/docs
+
+Available endpoints (prefix /api):
+- GET /api/health – health check
+- POST /api/process – JSON body with records to process
+- POST /api/upload – multipart file upload (.csv or .xlsx)
+
+Example: upload CSV
+```bash
+curl -F "file=@data/sample_sales.csv" \
+		 -F "horizon_days=30" -F "service_level=0.95" -F "lead_time_days=7" \
+		 http://127.0.0.1:8000/api/upload
+```
+
+Example: JSON payload
+```bash
+curl -X POST http://127.0.0.1:8000/api/process \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"records": [
+			{"date":"2025-08-01","sku":"SKU001","units_sold":10},
+			{"date":"2025-08-02","sku":"SKU001","units_sold":12}
+		],
+		"horizon_days": 30, "service_level": 0.95, "lead_time_days": 7
+	}'
+```
 
 ## Project Structure
 ```
