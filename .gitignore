@@ -1,0 +1,25 @@
+# Mac system files
+.DS_Store
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# Streamlit local configs
+.streamlit/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE & editor settings
+.vscode/
+.idea/
+
+# Environment or secret files
+.env
+.env.*
