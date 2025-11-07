@@ -1,1 +1,85 @@
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;color:#1e293b;background:#f8fafc;margin:2rem}h1{color:#0f172a}
+/* SupplySense custom theme */
+/* Base */
+:root {
+	--bg: #0d1117;
+	--bg-alt: #111827;
+	--panel: #161b22;
+	--panel-alt: #1e2530;
+	--border: #1f2937;
+	--text: #e6edf3;
+	--text-muted: #9ca3af;
+	--accent: #1d4ed8;
+	--accent-grad: linear-gradient(135deg,#2563eb,#1d4ed8);
+	--danger: #dc2626;
+	--warn: #f59e0b;
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 16px;
+	--shadow: 0 4px 14px -2px rgba(0,0,0,.4);
+}
+body, .block-container {font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;}
+body {background: var(--bg); color:var(--text);}
+h1, .ss-title {color:#fff;}
+.ss-header {padding:16px 8px 28px;margin-bottom:4px;border-bottom:1px solid var(--border);}
+.ss-title {font-size:2.15rem;font-weight:600;letter-spacing:.6px;}
+.ss-subtitle {font-size:.9rem;color:var(--text-muted);margin-top:6px;letter-spacing:.3px;}
+
+/* Cards */
+.stMetric {background:var(--panel);padding:12px 14px;border-radius:var(--radius-md);border:1px solid var(--border);position:relative;overflow:hidden;}
+.stMetric::before {content:"";position:absolute;inset:0;opacity:.08;background:radial-gradient(circle at top left,#2563eb,#1d4ed8);}
+div[data-testid="stMetricValue"] {font-weight:600;}
+div[data-testid="stMetricDelta"] {font-size:.65rem;}
+
+/* Section cards */
+.ss-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:20px;box-shadow:var(--shadow);} 
+.ss-card h4, .ss-card h3 {margin-top:0;font-weight:600;letter-spacing:.4px;}
+.ss-section-title {font-size:1.05rem;font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* Metric grid container */
+.ss-metrics-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0 6px;}
+
+/* Buttons */
+button[kind=primary] {background:var(--accent-grad)!important;color:#fff!important;border:none!important;border-radius:var(--radius-sm)!important;box-shadow:0 2px 6px -1px rgba(29,78,216,.5);}
+button[kind=primary]:hover {filter:brightness(1.12);} 
+/* Generic buttons */
+.ss-button {background:var(--panel-alt);color:var(--text);border:1px solid var(--border);padding:8px 16px;border-radius:var(--radius-sm);cursor:pointer;font-size:.85rem;line-height:1.2;display:inline-flex;align-items:center;gap:6px;}
+.ss-button:hover {background:#222c3a;}
+.ss-button.danger {border-color:var(--danger);color:#fff;background:linear-gradient(135deg,#ef4444,#dc2626);}
+.ss-button.danger:hover {filter:brightness(1.08);} 
+.ss-button.secondary {background:#1f2937;color:#fff;}
+.ss-button.secondary:hover {filter:brightness(1.15);} 
+
+/* Action bar */
+.ss-action-bar {display:flex;flex-wrap:wrap;justify-content:flex-end;gap:14px;margin:16px 0 6px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--panel-alt);} 
+.ss-action-bar .ss-button, .ss-action-bar button {min-width:170px;} 
+
+/* Dataframe */
+div[data-testid="stDataFrame"] {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:6px;}
+/* Tighten table fonts */
+div[data-testid="stDataFrame"] table {font-size:.78rem;}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {background:var(--bg-alt);border-right:1px solid var(--border);}
+section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {color:var(--text);}
+section[data-testid="stSidebar"] div[data-testid="stNumberInput"] input {text-align:center;}
+
+/* Tabs */
+button[role="tab"] {background:var(--panel);border-radius:var(--radius-sm);margin-right:6px;border:1px solid var(--border);padding:6px 14px;font-size:.8rem;}
+button[role="tab"][aria-selected="true"] {background:var(--accent);color:#fff;border-color:#2563eb;font-weight:600;}
+
+/* Inputs */
+input, textarea {background:var(--panel-alt)!important;color:var(--text)!important;border-radius:var(--radius-sm)!important;border:1px solid var(--border)!important;}
+div[data-baseweb="input"] {background:var(--panel-alt)!important;border-radius:var(--radius-sm)!important;border:1px solid var(--border)!important;}
+
+/* Slider label */
+div[data-testid="stSlider"] label {color:var(--text);}
+
+/* Upload placeholder tweak */
+div[data-testid="stFileUploader"] {border:1px dashed #2d3e50;padding:14px 18px;background:var(--panel-alt);border-radius:var(--radius-md);} 
+div[data-testid="stFileUploader"] label {font-size:.75rem;color:var(--text-muted);} 
+
+/* Scrollbar styling */
+::-webkit-scrollbar {width:10px;height:10px;}
+::-webkit-scrollbar-track {background:var(--bg-alt);}
+::-webkit-scrollbar-thumb {background:#2d3e50;border-radius:var(--radius-sm);} 
+::-webkit-scrollbar-thumb:hover {background:#3d5065;} 
