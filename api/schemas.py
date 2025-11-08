@@ -35,3 +35,12 @@ class ReportRow(BaseModel):
 class ProcessResponse(BaseModel):
     count: int
     rows: List[ReportRow]
+
+
+class AssistantRequest(ProcessRequest):
+    question: Optional[str] = None
+
+
+class AssistantResponse(BaseModel):
+    suggestions: List[str]
+    answer: Optional[str] = None

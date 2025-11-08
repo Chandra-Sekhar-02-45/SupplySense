@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import pandas as pd
 from agents import ForecastAgent, SafetyStockAgent, ReportAgent
+from agents.assistant_agent import AssistantAgent
 from utils.data_loader import load_sales_csv
 from utils.preprocess import clean_sales
 from utils.config import (
@@ -38,8 +39,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run SupplySense pipeline")
     parser.add_argument("csv", help="Path to sales CSV")
     parser.add_argument("--out", default="outputs/reorder_report.csv", help="Output CSV path")
+    parser.add_argument(
+        "--assistant", action="store_true",
+        help="Start an interactive assistant after the pipeline to suggest sales-increase actions"
+    )
     args = parser.parse_args()
 
     df = run_pipeline(args.csv)
     df.to_csv(args.out, index=False)
     print(f"Report written to {args.out}")
+
+    if args.assistant:
+        # Reload sales to provide richer context to the assistant
+        sales = load_sales_csv(args.csv)
+        sales = clean_sales(sales)
+        assistant = AssistantAgent()
+        # interactive loop: may block until user exits
+        assistant.interactive_loop(df, sales)

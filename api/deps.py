@@ -10,6 +10,7 @@ from utils.config import (
     DEFAULT_SERVICE_LEVEL,
     PACK_SIZE_DEFAULT,
 )
+from agents.assistant_agent import AssistantAgent
 
 
 def get_forecast_agent():
@@ -22,3 +23,7 @@ def get_safety_agent():
 
 def get_report_agent():
     return ReportAgent(pack_size_default=PACK_SIZE_DEFAULT)
+
+
+def get_assistant_agent():
+    return AssistantAgent()

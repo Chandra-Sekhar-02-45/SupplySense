@@ -6,10 +6,12 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
 from .schemas import ProcessRequest, ProcessResponse, ReportRow
-from .deps import get_forecast_agent, get_safety_agent, get_report_agent
+from .schemas import ProcessRequest, ProcessResponse, ReportRow, AssistantRequest, AssistantResponse
+from .deps import get_forecast_agent, get_safety_agent, get_report_agent, get_assistant_agent
 from agents.forecast_agent import ForecastAgent
 from agents.safety_stock_agent import SafetyStockAgent
 from agents.report_agent import ReportAgent
+from agents.assistant_agent import AssistantAgent
 from utils.preprocess import clean_sales
 
 router = APIRouter()
@@ -40,6 +42,37 @@ def process_json(
 
     rows = [ReportRow(**row._asdict()) if hasattr(row, "_asdict") else ReportRow(**row) for row in report.to_dict(orient="records")]
     return ProcessResponse(count=len(rows), rows=rows)
+
+
+@router.post("/assistant", response_model=AssistantResponse)
+def assistant_endpoint(
+    payload: AssistantRequest,
+    forecast_agent: ForecastAgent = Depends(get_forecast_agent),
+    safety_agent: SafetyStockAgent = Depends(get_safety_agent),
+    report_agent: ReportAgent = Depends(get_report_agent),
+    assistant: AssistantAgent = Depends(get_assistant_agent),
+):
+    """Return assistant suggestions and optionally answer a single free-text question.
+
+    The request body is the same as `/process` with an optional `question` field.
+    """
+    df = pd.DataFrame([r.dict() for r in payload.records])
+    try:
+        df = clean_sales(df)
+        forecast_df = forecast_agent.forecast(df, horizon_days=payload.horizon_days)
+        safety_df = safety_agent.compute(df)
+        last7 = df.sort_values(["sku", "date"]).groupby("sku").tail(7)
+        current_stock = last7.groupby("sku")["units_sold"].mean().reset_index(name="current_stock")
+        report = report_agent.build(current_stock, forecast_df, safety_df, horizon_days=payload.horizon_days)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    suggestions = assistant.suggest_actions(report, df)
+    answer = None
+    if payload.question:
+        answer = assistant.answer_question(payload.question, report, df)
+
+    return AssistantResponse(suggestions=suggestions, answer=answer)
 
 
 @router.post("/upload", response_model=ProcessResponse)
