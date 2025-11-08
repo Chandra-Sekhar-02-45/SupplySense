@@ -1,0 +1,36 @@
+{
+  "name": "SupplySense",
+  "version": "0.1.0",
+  "description": "AI-driven inventory forecasting and reorder recommendations with optional assistant (Gemini).",
+  "license": "MIT",
+  "entrypoints": {
+    "api": "uvicorn api.server:app --reload",
+    "ui": "streamlit run app/main.py",
+    "cli": "python3 main.py data/sample_sales.csv --out outputs/reorder_report.csv"
+  },
+  "api": {
+    "basePath": "/api",
+    "endpoints": {
+      "health": {
+        "method": "GET",
+        "path": "/api/health"
+      },
+      "process": {
+        "method": "POST",
+        "path": "/api/process",
+        "requestSchema": "./Input.json",
+        "responseSchema": "./Output.json"
+      },
+      "assistant": {
+        "method": "POST",
+        "path": "/api/assistant",
+        "requestSchema": "./Input.json"
+      }
+    }
+  },
+  "artifacts": [
+    "./Input.json",
+    "./Output.json"
+  ],
+  "createdAt": "2025-11-08T00:00:00Z"
+}

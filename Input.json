@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProcessRequest / AssistantRequest",
+  "type": "object",
+  "required": ["records", "horizon_days", "service_level", "lead_time_days"],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "sku", "units_sold"],
+        "properties": {
+          "date": {"type": "string", "description": "ISO date (YYYY-MM-DD)"},
+          "sku": {"type": "string"},
+          "units_sold": {"type": "number", "minimum": 0}
+        }
+      },
+      "minItems": 1
+    },
+    "horizon_days": {"type": "integer", "minimum": 1, "maximum": 180, "default": 30},
+    "service_level": {"type": "number", "minimum": 0.5, "maximum": 0.999, "default": 0.95},
+    "lead_time_days": {"type": "integer", "minimum": 1, "maximum": 120, "default": 7},
+    "question": {"type": ["string", "null"], "description": "Optional free-text question for assistant endpoint"}
+  }
+}

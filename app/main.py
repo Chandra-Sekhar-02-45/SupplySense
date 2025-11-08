@@ -271,7 +271,12 @@ with tabs[1]:
 			with ch1:
 				st.plotly_chart(visualizer.plot_sales_history(s_hist), width='stretch')
 			with ch2:
-				st.plotly_chart(visualizer.plot_forecast(s_fc), width='stretch')
+				# Backward compatible call in case an older visualizer is loaded
+				try:
+					fig = visualizer.plot_forecast(s_fc, history_df=s_hist)
+				except TypeError:
+					fig = visualizer.plot_forecast(s_fc)
+				st.plotly_chart(fig, width='stretch')
 
 		# Assistant suggestions and Q&A
 		with st.expander("Assistant — actionable suggestions & Q&A", expanded=False):
@@ -363,10 +368,43 @@ with tabs[1]:
 with tabs[2]:
 	st.markdown(
 		"""
-		**About**
 
-		SupplySense helps you forecast demand, compute safety stock, and
-		generate reorder recommendations. Use the sidebar to configure the
-		forecast horizon, service level, and default lead time.
+	SupplySense is an AI-powered intelligent agent designed to help small and medium enterprises (SMEs) optimize their inventory management and reorder planning.
+
+Many small businesses struggle with either stockouts of high-demand items or overstocking of slow-moving goods, leading to lost sales, wasted storage, and blocked capital. SupplySense addresses this problem by automating and optimizing reorder decisions using data-driven insights.
+
+⚙️ How SupplySense Works
+
+SupplySense consists of three core agents that work collaboratively to generate precise reorder recommendations:
+
+🧠 Forecast Agent – Predicts next month’s demand for each SKU using time-series models like ARIMA or Prophet.
+
+🧾 Safety Stock Agent – Calculates safety stock and reorder levels based on lead times and sales variability.
+
+📊 Report Agent – Combines the insights and generates a SKU-wise reorder report displaying optimal reorder quantities along with supplier details.
+
+💻 Tech Stack
+
+Python, Pandas, Statsmodels, Streamlit
+
+Input: sales.csv (date, SKU, sales quantity, lead time)
+
+Output: Interactive dashboard showing forecasted demand and reorder recommendations
+
+🎯 Impact
+
+With SupplySense, businesses can:
+
+Prevent stockouts and lost sales
+
+Avoid overstocking and excess inventory costs
+
+Optimize cash flow and supply chain efficiency
+
+Make data-driven reorder decisions with just one upload
+
+💡 In One Line
+
+“SupplySense — Empowering small businesses to reorder smartly, maintain balance, and boost profits through intelligent inventory forecasting.”
 		"""
 	)

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProcessResponse",
+  "type": "object",
+  "required": ["count", "rows"],
+  "properties": {
+    "count": {"type": "integer", "minimum": 0},
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sku",
+          "current_stock",
+          "reorder_point",
+          "safety_stock",
+          "forecast_30d",
+          "recommended_order_qty"
+        ],
+        "properties": {
+          "sku": {"type": "string"},
+          "current_stock": {"type": "number"},
+          "reorder_point": {"type": "number"},
+          "safety_stock": {"type": "number"},
+          "forecast_30d": {"type": "number"},
+          "recommended_order_qty": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "count": 2,
+      "rows": [
+        {
+          "sku": "sku101",
+          "current_stock": 10.0,
+          "reorder_point": 24.0,
+          "safety_stock": 8.0,
+          "forecast_30d": 320.0,
+          "recommended_order_qty": 295
+        },
+        {
+          "sku": "sku102",
+          "current_stock": 9.0,
+          "reorder_point": 20.0,
+          "safety_stock": 7.0,
+          "forecast_30d": 280.0,
+          "recommended_order_qty": 251
+        }
+      ]
+    }
+  ]
+}

@@ -92,6 +92,22 @@ class ForecastAgent:
                 level = float(grp2["sma"].dropna().iloc[-1]) if grp2["sma"].notna().any() else float(grp2["units_sold"].tail(7).mean())
                 fcst = [max(level, 0.0)] * horizon_days
 
+            # If forecast is flat but recent history shows movement, switch to a simple drift method
+            try:
+                if fcst is not None and (np.ptp(fcst) < 1e-8):
+                    window_n = min(14, len(y))
+                    recent = y.tail(window_n)
+                    if recent.nunique() > 1 and window_n > 1:
+                        slope = (recent.iloc[-1] - recent.iloc[0]) / (window_n - 1)
+                        start_level = float(y.iloc[-1]) if len(y) else fcst[0]
+                        drift_fcst = [max(start_level + slope * d, 0.0) for d in range(1, horizon_days + 1)]
+                        # Only replace if drift actually introduces variation
+                        if np.ptp(drift_fcst) > 1e-8:
+                            fcst = drift_fcst
+                            model_used = "DRIFT"
+            except Exception:
+                pass
+
             # build records
             for d in range(1, horizon_days + 1):
                 records.append(
